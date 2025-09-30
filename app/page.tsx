@@ -1,10 +1,18 @@
-import { Button } from "@/components/ui/button";
+import Background from "@/components/background";
+import ContainerCash from "@/components/container-cash";
 
 export default function Home() {
   return (
-    <div className="bg-slate-200 text-white min-h-screen flex flex-col gap-6 items-center justify-center">
-      <h1 className="primary-text text-3xl font-extrabold">Money Orbit</h1>
-      <Button>Hello World</Button>
+    <div className="min-h-screen relative overflow-hidden">
+      <Background />
+      <div className="absolute top-0 left-0 w-full h-full flex items-center">
+        <div className="container mx-auto flex flex-col gap-6">
+          <h1 className="text-5xl font-extrabold text-black text-left">
+            Welcome to <span className="primary-text">Money Orbit</span>
+          </h1>
+          <ContainerCash />
+        </div>
+      </div>
     </div>
   );
 }

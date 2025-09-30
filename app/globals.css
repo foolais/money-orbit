@@ -123,10 +123,20 @@
 
 @layer utilities {
   .primary-text {
-    @apply bg-linear-to-t from-emerald-600 to-lime-400 bg-clip-text text-transparent;
+    @apply bg-linear-to-t from-sky-500 to-indigo-500 bg-clip-text text-transparent;
   }
   .primary-bg {
-    @apply bg-linear-to-t from-emerald-600 to-lime-400;
+    @apply bg-linear-to-t from-sky-500 to-indigo-500;
+  }
+  .primary-border {
+    background: linear-gradient(#fff, #fff) padding-box,
+      linear-gradient(to top, #0ea5e9, #6366f1) border-box;
+    border: 3px dotted transparent;
+    border-radius: 0.75rem;
+    -webkit-border-radius: 0.75rem;
+    -moz-border-radius: 0.75rem;
+    -ms-border-radius: 0.75rem;
+    -o-border-radius: 0.75rem;
   }
   .neu {
     margin-bottom: -3px;
