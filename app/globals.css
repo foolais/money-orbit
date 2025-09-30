@@ -131,7 +131,7 @@
   .primary-border {
     background: linear-gradient(#fff, #fff) padding-box,
       linear-gradient(to top, #0ea5e9, #6366f1) border-box;
-    border: 3px dotted transparent;
+    border: 2px dotted transparent;
     border-radius: 0.75rem;
     -webkit-border-radius: 0.75rem;
     -moz-border-radius: 0.75rem;

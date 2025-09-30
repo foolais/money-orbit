@@ -5,7 +5,7 @@ import CountUp from "./CountUp";
 const CashCardAmount = ({ amount }: { amount: number }) => {
   return (
     <div className="text-4xl font-bold">
-      {"Rp."}
+      {"Rp"}
       <CountUp
         from={0}
         to={amount}

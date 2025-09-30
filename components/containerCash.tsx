@@ -4,7 +4,7 @@ import { TrendingDown, TrendingUp } from "lucide-react";
 
 const ContainerCash = () => {
   return (
-    <div className="w-3/4 grid py-6">
+    <div className="grid w-md">
       <div className="grid gap-8">
         <CashCard type="total" amount={500000} />
         <CashCard
