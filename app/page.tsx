@@ -3,6 +3,11 @@ import ContainerCash from "@/components/containerCash";
 import ContainerHeader from "@/components/containerHeader";
 import ContainerTable from "@/components/containerTable";
 
+export const metadata = {
+  title: "Money Orbit",
+  description: "A simple Money Manager App",
+};
+
 export default function Home() {
   return (
     <div className="min-h-screen relative overflow-hidden">

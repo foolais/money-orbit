@@ -14,3 +14,15 @@ export const formatNumberInput = (value: string): string => {
 export const parseFormattedNumber = (formattedValue: string): number => {
   return parseInt(formattedValue.replace(/\D/g, "")) || 0;
 };
+
+export const formatDate = (dateString: Date) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-GB");
+};
+
+export const formatRupiah = (value: number) => {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+  }).format(value);
+};

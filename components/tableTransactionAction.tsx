@@ -6,7 +6,6 @@ import { useState } from "react";
 import FormTransaction from "./formTransaction";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -14,11 +13,17 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
+import { deleteTransaction } from "@/action/action-transaction";
 
-const TableTransactionAction = () => {
+const TableTransactionAction = ({ id }: { id: string }) => {
   const [type, setType] = useState<"detail" | "update">("detail");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+
+  const handleDelete = async () => {
+    await deleteTransaction(id);
+    setIsAlertOpen(false);
+  };
 
   return (
     <>
@@ -50,6 +55,7 @@ const TableTransactionAction = () => {
       {isDialogOpen &&
         (type === "detail" ? (
           <FormTransaction
+            id={id}
             isOpen={isDialogOpen}
             onClose={() => setIsDialogOpen(false)}
             title="Detail Transaction"
@@ -57,6 +63,7 @@ const TableTransactionAction = () => {
           />
         ) : (
           <FormTransaction
+            id={id}
             isOpen={isDialogOpen}
             onClose={() => setIsDialogOpen(false)}
             title="Update Transaction"
@@ -78,7 +85,7 @@ const TableTransactionAction = () => {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction>Yes</AlertDialogAction>
+              <Button onClick={handleDelete}>Yes</Button>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

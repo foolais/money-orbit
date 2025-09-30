@@ -16,24 +16,34 @@ import {
 import { Input } from "./ui/input";
 import { formatNumberInput, parseFormattedNumber } from "@/lib/utils";
 import { Button } from "./ui/button";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
+import { useEffect, useTransition } from "react";
+import {
+  createTransaction,
+  getDetailTransaction,
+  updateTransaction,
+} from "@/action/action-transaction";
 
 interface iProps {
+  id?: string;
   isOpen: boolean;
-  onClose?: () => void;
+  onClose: () => void;
   title: string;
   formType: "detail" | "create" | "update";
 }
 
-const FormTransaction = ({ isOpen, onClose, title, formType }: iProps) => {
+const FormTransaction = ({ id, isOpen, onClose, title, formType }: iProps) => {
+  const [isSubmitting, startSubmission] = useTransition();
+  const [isFetching, startFetching] = useTransition();
+
   const formSchema = z.object({
     title: z
       .string()
       .min(2, "Title must be at least 5 characters")
       .max(50, "Title must be at most 50 characters"),
     amount: z.number().min(1, "Amount must be at least 1"),
-    type: z.enum(["income", "expense"]),
+    type: z.enum(["INCOME", "EXPENSE"]),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -41,15 +51,53 @@ const FormTransaction = ({ isOpen, onClose, title, formType }: iProps) => {
     defaultValues: {
       title: "",
       amount: 0,
-      type: "income",
+      type: "INCOME",
     },
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
+    startSubmission(async () => {
+      try {
+        if (formType === "create") {
+          const res = await createTransaction(values);
+          if (res.success) console.log(res.message);
+        } else if (formType === "update" && id !== undefined) {
+          const res = await updateTransaction(id, values);
+          if (res.success) console.log(res.message);
+        }
+        onClose();
+        form.reset({
+          title: "",
+          amount: 0,
+          type: "INCOME",
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    });
     console.log(values);
   };
 
-  const isDisabled = formType === "detail";
+  useEffect(() => {
+    if (formType !== "create" && id !== undefined) {
+      startFetching(async () => {
+        try {
+          const data = await getDetailTransaction(id);
+          if (data && !("error" in data)) {
+            form.reset({
+              title: data.title,
+              amount: data.amount,
+              type: data.type,
+            });
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      });
+    }
+  }, [formType, id, form]);
+
+  const isDisabled = formType === "detail" || isSubmitting || isFetching;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -130,11 +178,11 @@ const FormTransaction = ({ isOpen, onClose, title, formType }: iProps) => {
                         className="w-full primary-border"
                         disabled={isDisabled}
                       >
-                        {field.value === "income" ? "Income" : "Expense"}
+                        {field.value === "INCOME" ? "Income" : "Expense"}
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="income">Income</SelectItem>
-                        <SelectItem value="expense">Expense</SelectItem>
+                        <SelectItem value="INCOME">Income</SelectItem>
+                        <SelectItem value="EXPENSE">Expense</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -142,10 +190,18 @@ const FormTransaction = ({ isOpen, onClose, title, formType }: iProps) => {
                 </FormItem>
               )}
             />
-            {!isDisabled && (
-              <Button type="submit" className="w-full mt-4">
+            {formType !== "detail" && (
+              <Button
+                type="submit"
+                className="w-full mt-4"
+                disabled={isDisabled}
+              >
                 {formType === "create" ? "Create" : "Update"} Transaction
-                <ChevronRight />
+                {isSubmitting ? (
+                  <Loader2 className="ml-2 size-4 animate-spin" />
+                ) : (
+                  <ChevronRight />
+                )}
               </Button>
             )}
           </form>

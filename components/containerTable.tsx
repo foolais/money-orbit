@@ -8,16 +8,26 @@ import {
   TableRow,
 } from "./ui/table";
 import TableTransactionAction from "./tableTransactionAction";
+import { getTransactions } from "@/action/action-transaction";
+import { formatDate, formatRupiah } from "@/lib/utils";
 
-const mockData = Array.from({ length: 20 }, (_, index) => ({
-  id: index,
-  title: "Salary",
-  amount: "Rp 5.000.000",
-  type: index % 2 === 0 ? "Income" : "Expense",
-  date: "2023-08-01",
-}));
+const ContainerTable = async () => {
+  const datas = await getTransactions();
+  console.log(datas);
 
-const ContainerTable = () => {
+  const transactions =
+    datas && datas.length
+      ? datas?.map((data) => {
+          return {
+            id: data.id,
+            title: data.title,
+            amount: data.amount,
+            type: data.type,
+            date: data.createdAt,
+          };
+        })
+      : [];
+
   return (
     <div className="primary-border neu w-full p-6 rounded-xl">
       <ScrollArea className="h-[400px] w-full">
@@ -32,20 +42,21 @@ const ContainerTable = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {mockData.map(({ id, title, amount, type, date }) => (
+            {transactions.map(({ id, title, amount, type, date }) => (
               <TableRow key={id}>
                 <TableCell className="font-medium">{title}</TableCell>
-                <TableCell>{amount}</TableCell>
+                <TableCell>{formatRupiah(amount)}</TableCell>
                 <TableCell
-                  className={
-                    type === "Income" ? "text-green-500" : "text-red-500"
-                  }
+                  className={`${
+                    type === "INCOME" ? "text-green-500" : "text-red-500"
+                  } font-semibold
+                  `}
                 >
-                  {type}
+                  {type === "INCOME" ? "Income" : "Expense"}
                 </TableCell>
-                <TableCell>{date}</TableCell>
+                <TableCell>{formatDate(date)}</TableCell>
                 <TableCell>
-                  <TableTransactionAction />
+                  <TableTransactionAction id={id} />
                 </TableCell>
               </TableRow>
             ))}
