@@ -1,5 +1,3 @@
-import { Edit, Info, Trash } from "lucide-react";
-import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
 import {
   Table,
@@ -9,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
+import TableTransactionAction from "./tableTransactionAction";
 
 const mockData = Array.from({ length: 20 }, (_, index) => ({
   id: index,
@@ -45,16 +44,8 @@ const ContainerTable = () => {
                   {type}
                 </TableCell>
                 <TableCell>{date}</TableCell>
-                <TableCell className="flex items-center justify-center gap-2">
-                  <Button variant="ghost" size="sm">
-                    <Info color="teal" />
-                  </Button>
-                  <Button variant="ghost" size="sm">
-                    <Edit color="blue" />
-                  </Button>
-                  <Button variant="ghost" size="sm">
-                    <Trash color="red" />
-                  </Button>
+                <TableCell>
+                  <TableTransactionAction />
                 </TableCell>
               </TableRow>
             ))}
