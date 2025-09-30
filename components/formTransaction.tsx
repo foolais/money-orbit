@@ -24,6 +24,7 @@ import {
   getDetailTransaction,
   updateTransaction,
 } from "@/action/action-transaction";
+import { toast } from "sonner";
 
 interface iProps {
   id?: string;
@@ -60,10 +61,10 @@ const FormTransaction = ({ id, isOpen, onClose, title, formType }: iProps) => {
       try {
         if (formType === "create") {
           const res = await createTransaction(values);
-          if (res.success) console.log(res.message);
+          if (res.success) toast.success(res.message);
         } else if (formType === "update" && id !== undefined) {
           const res = await updateTransaction(id, values);
-          if (res.success) console.log(res.message);
+          if (res.success) toast.success(res.message);
         }
         onClose();
         form.reset({

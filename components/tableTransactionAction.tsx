@@ -14,6 +14,7 @@ import {
   AlertDialogTitle,
 } from "./ui/alert-dialog";
 import { deleteTransaction } from "@/action/action-transaction";
+import { toast } from "sonner";
 
 const TableTransactionAction = ({ id }: { id: string }) => {
   const [type, setType] = useState<"detail" | "update">("detail");
@@ -21,7 +22,8 @@ const TableTransactionAction = ({ id }: { id: string }) => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const handleDelete = async () => {
-    await deleteTransaction(id);
+    const res = await deleteTransaction(id);
+    if (res.success && !("error" in res)) toast.success(res.message);
     setIsAlertOpen(false);
   };
 
