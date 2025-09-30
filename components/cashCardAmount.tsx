@@ -11,7 +11,7 @@ const CashCardAmount = ({ amount }: { amount: number }) => {
         to={amount}
         separator="."
         direction="up"
-        duration={0.2}
+        duration={0.1}
         className="count-up-text"
       />
     </div>

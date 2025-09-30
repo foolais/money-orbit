@@ -89,3 +89,26 @@ export const deleteTransaction = async (id: string) => {
     return { error: true, message: error };
   }
 };
+
+export const getTransactionSummary = async () => {
+  const income = await prisma.transaction.aggregate({
+    _sum: { amount: true },
+    where: { type: "INCOME" },
+  });
+
+  const expense = await prisma.transaction.aggregate({
+    _sum: { amount: true },
+    where: { type: "EXPENSE" },
+  });
+
+  const totalIncome = income._sum.amount ?? 0;
+  const totalExpense = expense._sum.amount ?? 0;
+
+  const totalCash = totalIncome - totalExpense;
+
+  return {
+    totalCash,
+    totalIncome,
+    totalExpense,
+  };
+};
