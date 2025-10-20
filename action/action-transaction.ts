@@ -67,7 +67,7 @@ export const updateTransaction = async (id: string, data: iTransaction) => {
         type: type as "INCOME" | "EXPENSE",
       },
     });
-    revalidatePath("/transactions");
+    revalidatePath("/");
     return { success: true, message: "Transaction updated successfully" };
   } catch (error) {
     console.log(error);
